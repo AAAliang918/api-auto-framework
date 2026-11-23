@@ -1,0 +1,109 @@
+{
+  "login": [
+    {
+      "id": "login_001",
+      "title": "正确账号密码登录成功",
+      "method": "post",
+      "path": "/login",
+      "json": {
+        "username": "admin",
+        "password": "123456"
+      },
+      "expected": {
+        "status": 200,
+        "code": 0,
+        "fields": [
+          "data.token"
+        ]
+      },
+      "markers": [
+        "smoke"
+      ]
+    },
+    {
+      "id": "login_002",
+      "title": "密码错误登录失败",
+      "method": "post",
+      "path": "/login",
+      "json": {
+        "username": "admin",
+        "password": "wrong"
+      },
+      "expected": {
+        "status": 401,
+        "code": 1001,
+        "fields": []
+      },
+      "markers": [
+        "regression"
+      ]
+    },
+    {
+      "id": "login_003",
+      "title": "用户名为空返回参数错误",
+      "method": "post",
+      "path": "/login",
+      "json": {
+        "username": "",
+        "password": "123456"
+      },
+      "expected": {
+        "status": 400,
+        "code": 1000,
+        "fields": []
+      },
+      "markers": [
+        "regression"
+      ]
+    }
+  ],
+  "permission": [
+    {
+      "id": "perm_001",
+      "title": "admin 有 admin 角色，可查看用户列表",
+      "method": "get",
+      "path": "/admin/users",
+      "user": "admin",
+      "expected": {
+        "status": 200,
+        "code": 0,
+        "fields": [
+          "data.list"
+        ]
+      },
+      "markers": [
+        "smoke"
+      ]
+    },
+    {
+      "id": "perm_002",
+      "title": "tester 已登录但无 admin 角色，返回 403",
+      "method": "get",
+      "path": "/admin/users",
+      "user": "tester",
+      "expected": {
+        "status": 403,
+        "code": 1003,
+        "fields": []
+      },
+      "markers": [
+        "regression"
+      ]
+    },
+    {
+      "id": "perm_003",
+      "title": "未携带 token，返回 401",
+      "method": "get",
+      "path": "/admin/users",
+      "user": "guest",
+      "expected": {
+        "status": 401,
+        "code": 1002,
+        "fields": []
+      },
+      "markers": [
+        "regression"
+      ]
+    }
+  ]
+}
