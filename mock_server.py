@@ -98,10 +98,15 @@ class Handler(BaseHTTPRequestHandler):
             if not self._require_token():
                 return
             page = int(query.get("page", ["1"])[0])
+            if page<1:
+                return self._send(400,{'code':1000,'msg':"page必须大于等于1"})
+            items=[]if page>1 else [
+                {"orderId": "A1001", "amount": 99.0},
+                {"orderId": "A1002", "amount": 199.0}
+            ]
             return self._send(200, {"code": 0, "data": {
                 "page": page, "total": 2,
-                "list": [{"orderId": "A1001", "amount": 99.0},
-                         {"orderId": "A1002", "amount": 199.0}]}})
+                "list": items }})
 
         if path == "/admin/users":
             tk = self._require_token()

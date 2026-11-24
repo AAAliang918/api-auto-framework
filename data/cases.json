@@ -105,5 +105,95 @@
         "regression"
       ]
     }
+
+  ],
+    "orders": [
+    {
+      "id": "order_001",
+      "title": "不传 page，默认返回第 1 页",
+      "method": "get",
+      "path": "/orders",
+      "expected": {
+        "status": 200,
+        "code": 0,
+        "fields": ["data.list", "data.total"],
+        "values": {"data.page": 1}
+      },
+      "markers": ["smoke"]
+    },
+    {
+      "id": "order_002",
+      "title": "page=0 参数非法，返回 400",
+      "method": "get",
+      "path": "/orders",
+      "params": {"page": 0},
+      "expected": {
+        "status": 400,
+        "code": 1000,
+        "fields": [],
+        "values": {}
+      },
+      "markers": ["regression"]
+    },
+    {
+      "id": "order_003",
+      "title": "page=999 超出范围，返回空列表",
+      "method": "get",
+      "path": "/orders",
+      "params": {"page": 999},
+      "expected": {
+        "status": 200,
+        "code": 0,
+        "fields": [],
+        "values": {"data.list": [], "data.total": 2}
+      },
+      "markers": ["regression"]
+    }
+  ],
+  "user_info": [
+    {
+      "id": "user_001",
+      "title": "admin 查询个人信息，角色为 admin",
+      "method": "get",
+      "path": "/user/info",
+      "user": "admin",
+      "expected": {
+        "status": 200,
+        "code": 0,
+        "fields": [],
+        "values": {"data.role": "admin"}
+      },
+      "markers": ["smoke"]
+    },
+    {
+      "id": "user_002",
+      "title": "tester 查询个人信息，角色为 qa",
+      "method": "get",
+      "path": "/user/info",
+      "user": "tester",
+      "expected": {
+        "status": 200,
+        "code": 0,
+        "fields": [],
+        "values": {"data.role": "qa"}
+      },
+      "markers": ["regression"]
+    }
+  ],
+  "token": [
+    {
+      "id": "token_001",
+      "title": "非法 token 访问 admin 接口，返回 401",
+      "method": "get",
+      "path": "/admin/users",
+      "token": "invalid-token-xxx",
+      "expected": {
+        "status": 401,
+        "code": 1002,
+        "fields": [],
+        "values": {}
+      },
+      "markers": ["regression"]
+    }
   ]
 }
