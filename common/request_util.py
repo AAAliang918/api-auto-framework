@@ -31,7 +31,7 @@ class RequestUtil:
             headers["Authorization"] = "Bearer " + self.token
 
         kwargs['headers'] = headers
-        log.info('<-- %s %s  ', method.upper(), url)
+        log.info('--> %s %s  ', method.upper(), url)
         try:
             res = self.session.request(method, url, **kwargs)
             log.info('<-- %s %s 耗时=%.0fms 状态码：%s',method.upper(),url,(time.perf_counter()-start)*1000,res.status_code)
